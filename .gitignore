@@ -11,3 +11,7 @@ stacktrace.log
 test/reports
 target-eclipse
 .svn
+*.iml
+*.zip
+*.sha1
+.idea

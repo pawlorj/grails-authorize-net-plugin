@@ -10,4 +10,4 @@
 //
 
 Ant.copy(file:"${pluginBasedir}/grails-app/conf/DefaultAuthorizeNetConfig.groovy",
-         tofile:"${basedir}/grails-app/conf/AuthorizeNetConfig.groovy")
+        tofile:"${basedir}/grails-app/conf/AuthorizeNetConfig.groovy")

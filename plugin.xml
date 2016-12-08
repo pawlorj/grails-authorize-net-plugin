@@ -1,4 +1,4 @@
-<plugin name='authorize-net' version='0.12' grailsVersion='1.2.2 &gt; *'>
+<plugin name='authorize-net' version='0.13' grailsVersion='2.4.4 &gt; *'>
   <author>Bob Pawlowski</author>
   <authorEmail>bob@vinomis.com</authorEmail>
   <title>Authorize.net Plugin</title>
@@ -6,16 +6,10 @@
 Authorize.net Plugin does simple authorize/capture, void, and refund operations.
 </description>
   <documentation>http://grails.org/plugin/authorize-net</documentation>
+  <type>AuthorizeNetGrailsPlugin</type>
   <resources>
     <resource>DefaultAuthorizeNetConfig</resource>
-    <resource>UrlMappings</resource>
     <resource>com.vinomis.authnet.AuthorizeNet</resource>
     <resource>com.vinomis.authnet.AuthorizeNetResponse</resource>
   </resources>
-  <dependencies>
-    <resolvers>
-      <resolver type='grailsPlugins' name='grailsPlugins' />
-    </resolvers>
-  </dependencies>
-  <behavior />
 </plugin>

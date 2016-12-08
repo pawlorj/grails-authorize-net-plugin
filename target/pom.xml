@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns='http://maven.apache.org/POM/4.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd'>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.grails.plugins</groupId>
+  <artifactId>authorize-net</artifactId>
+  <packaging>zip</packaging>
+  <version>0.13</version>
+  <name>Authorize.net Plugin</name>
+  <description>\
+Authorize.net Plugin does simple authorize/capture, void, and refund operations.
+</description>
+  <url>http://grails.org/plugin/authorize-net</url>
+  <developers>
+    <developer>
+      <name>Bob Pawlowski</name>
+      <email>bob@vinomis.com</email>
+    </developer>
+  </developers>
+  <dependencies />
+</project>
