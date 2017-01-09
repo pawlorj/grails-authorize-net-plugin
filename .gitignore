@@ -8,6 +8,7 @@
 /*.tmproj
 /out/**
 stacktrace.log
+target/
 test/reports
 target-eclipse
 .svn
