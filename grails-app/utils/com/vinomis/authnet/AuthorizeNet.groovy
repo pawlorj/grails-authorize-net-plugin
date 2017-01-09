@@ -1,6 +1,6 @@
 package com.vinomis.authnet
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import grails.util.Holders
 
 /**
  *
@@ -8,28 +8,31 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  */
 class AuthorizeNet extends BuilderSupport {
 
-def writer
-String login = ConfigurationHolder.config?.authorizeNet?.login
-String transactionKey = ConfigurationHolder.config?.authorizeNet?.transactionKey
-String urlString = ConfigurationHolder.config?.authorizeNet?.urlString
-boolean testMode = ConfigurationHolder.config?.authorizeNet?.testMode
-String duplicateWindow = ConfigurationHolder.config?.authorizeNet?.duplicateWindow  //Default is 120 (2 minutes)
-String delimiter = ConfigurationHolder.config?.authorizeNet?.delimiter
-def connection
-int nodeCount = 0
+    def writer
 
-def createWriter() {
-    if (true) {
-        def url = new URL(urlString)
-        connection = url.openConnection()
-        connection.setRequestMethod("POST")
-        connection.doOutput = true
-        connection.doInput = true
-        return new OutputStreamWriter(connection.outputStream)
-    } else {
-        return new OutputStreamWriter(System.out)
+    def config = Holders.config
+
+    String login = config?.authorizeNet?.login
+    String transactionKey = config?.authorizeNet?.transactionKey
+    String urlString = config?.authorizeNet?.urlString
+    boolean testMode = config?.authorizeNet?.testMode
+    String duplicateWindow = config?.authorizeNet?.duplicateWindow  //Default is 120 (2 minutes)
+    String delimiter = config?.authorizeNet?.delimiter
+    def connection
+    int nodeCount = 0
+
+    def createWriter() {
+        if (true) {
+            def url = new URL(urlString)
+            connection = url.openConnection()
+            connection.setRequestMethod("POST")
+            connection.doOutput = true
+            connection.doInput = true
+            return new OutputStreamWriter(connection.outputStream)
+        } else {
+            return new OutputStreamWriter(System.out)
+        }
     }
-}
 
     def submit() {
         writer.flush()
@@ -60,7 +63,7 @@ def createWriter() {
         writer.write(delimiter)
         writer.write('&x_encap_char=&x_encap_char=')
         writer.write('&x_currency_code=USD')
-        switch(name) {
+        switch (name) {
             case 'authorizeAndCapture':
                 current = name
                 writer.write('&x_method=CC&x_type=AUTH_CAPTURE')
@@ -69,42 +72,42 @@ def createWriter() {
                 writer.write('&x_test_request=')
                 writer.write(testMode ? 'TRUE' : 'FALSE')
                 break
-             case 'authorizeOnly':
-                 writer.write('&x_method=CC&x_type=AUTH_ONLY')
+            case 'authorizeOnly':
+                writer.write('&x_method=CC&x_type=AUTH_ONLY')
                 writer.write('&x_duplicate_window=')
                 writer.write(duplicateWindow)
                 writer.write('&x_test_request=')
                 writer.write(testMode ? 'TRUE' : 'FALSE')
                 break
-             case 'capturePriorAuthorization':
+            case 'capturePriorAuthorization':
                 writer.write('&x_method=CC&x_type=PRIOR_AUTH_CAPTURE')
                 writer.write('&x_duplicate_window=')
                 writer.write(duplicateWindow)
                 writer.write('&x_test_request=')
                 writer.write(testMode ? 'TRUE' : 'FALSE')
                 break
-             case 'void':
+            case 'void':
                 writer.write('&x_method=CC&x_type=VOID')
                 break
-             case 'echeckVoid':
+            case 'echeckVoid':
                 writer.write('&x_method=ECHECK&x_type=VOID')
                 break
-             case 'credit':
+            case 'credit':
                 writer.write('&x_method=CC&x_type=CREDIT')
                 break
-             case 'echeckCredit':
+            case 'echeckCredit':
                 writer.write('&x_method=ECHECK&x_type=CREDIT')
                 break
-             case 'echeck':
+            case 'echeck':
                 writer.write('&x_method=ECHECK&x_type=AUTH_CAPTURE')
                 break
-             default:
-            'unrecognized'
+            default:
+                'unrecognized'
         }
         nodeCount++
     }
 
-    def createNode(name,value) {
+    def createNode(name, value) {
         String lowerCaseName = name.toLowerCase()
         boolean valueWritten = false
         switch (lowerCaseName) {
@@ -118,14 +121,14 @@ def createWriter() {
                 break
             case 'name':
             case 'fullname':
-               String[] names = value.split(' ')
-               writer.write('&x_first_name=')
-               writer.write(names[0])
-               writer.write('&x_last_name=')
-               writer.write(names[1])
-               valueWritten = true
-               break
-             case 'firstname':
+                String[] names = value.split(' ')
+                writer.write('&x_first_name=')
+                writer.write(names[0])
+                writer.write('&x_last_name=')
+                writer.write(names[1])
+                valueWritten = true
+                break
+            case 'firstname':
                 writer.write('&x_first_name=')
                 break
             case 'lastname':
@@ -138,8 +141,8 @@ def createWriter() {
                 writer.write('&x_city=')
                 break
             case 'state':
-               writer.write('&x_state=')
-               break
+                writer.write('&x_state=')
+                break
             case 'zip':
             case 'zipcode':
                 writer.write('&x_zip=')
@@ -198,42 +201,41 @@ def createWriter() {
                     if (lowerCaseName.indexOf('_') >= 0) {
                         writer.write(lowerCaseName)
                     } else {
-                        writer.write("${name.replaceAll('([A-Z])','_$1').toLowerCase()}=")
+                        writer.write("${name.replaceAll('([A-Z])', '_$1').toLowerCase()}=")
                     }
 
                 }
-         }
-         if (!valueWritten) writer.write(value)
-         nodeCount++
-   }
+        }
+        if (!valueWritten) writer.write(value)
+        nodeCount++
+    }
 
     def createNode(name, Map attributes) {
-        if (name.toLowerCase() == 'item' ) {
+        if (name.toLowerCase() == 'item') {
             writer.write('&x_line_item=')
             writer.write(attributes.get('id'))
             writer.write('<|>')
-             writer.write(attributes.get('name'))
+            writer.write(attributes.get('name'))
             writer.write('<|>')
-              writer.write(attributes.get('description'))
-           writer.write('<|>')
-             writer.write(attributes.get('quantity'))
+            writer.write(attributes.get('description'))
             writer.write('<|>')
-              writer.write(attributes.get('price'))
-           writer.write('<|>')
-              writer.write(attributes.get('taxable'))
-       }
-   }
+            writer.write(attributes.get('quantity'))
+            writer.write('<|>')
+            writer.write(attributes.get('price'))
+            writer.write('<|>')
+            writer.write(attributes.get('taxable'))
+        }
+    }
 
     def createNode(name, Map attributes, value) {
-       }
+    }
 
     void setParent(parent, child) {
     }
 
-    void nodeCompleted(parent, child){
+    void nodeCompleted(parent, child) {
         nodeCount--
     }
-
 
 
 }

@@ -8,6 +8,11 @@
 /*.tmproj
 /out/**
 stacktrace.log
+target/
 test/reports
 target-eclipse
 .svn
+*.iml
+*.zip
+*.sha1
+.idea
